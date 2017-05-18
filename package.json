@@ -1,0 +1,15 @@
+{
+  "name": "shp-write-stream",
+  "version": "1.0.0",
+  "description": "stream shapefiles, sorta",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "pump": "^1.0.2",
+    "readable-stream": "^2.2.9"
+  }
+}
