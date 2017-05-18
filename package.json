@@ -1,7 +1,7 @@
 {
   "name": "shp-write-stream",
   "version": "1.0.0",
-  "description": "stream shapefiles, sorta",
+  "description": "stream write shapefiles, sorta",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -11,5 +11,14 @@
   "dependencies": {
     "pump": "^1.0.2",
     "readable-stream": "^2.2.9"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/calvinmetcalf/shp-write-stream.git"
+  },
+  "bugs": {
+    "url": "https://github.com/calvinmetcalf/shp-write-stream/issues"
+  },
+  "homepage": "https://github.com/calvinmetcalf/shp-write-stream#readme"
 }
