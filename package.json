@@ -1,6 +1,6 @@
 {
   "name": "shp-write-stream",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "stream write shapefiles, sorta",
   "main": "index.js",
   "scripts": {
