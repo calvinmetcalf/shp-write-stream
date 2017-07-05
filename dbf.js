@@ -131,7 +131,7 @@ class Dbf extends stream.Transform {
     var cur = 32;
     while (++i < this.fields.length) {
       let field = this.fields[i];
-      out.write(field.name, cur, 8, 'ascii');
+      out.write(field.name, cur, 10, 'ascii');
       cur += 11;
       out.write(field.type, cur, 1, 'ascii');
       cur += 5;

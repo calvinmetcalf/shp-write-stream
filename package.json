@@ -9,6 +9,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "debug": "^2.6.8",
     "pump": "^1.0.2",
     "readable-stream": "^2.2.9"
   },

@@ -2,7 +2,7 @@ const shpWritter = require('./shp');
 const DbfWritter = require('./dbf');
 const stream = require('readable-stream');
 const pump = require('pump');
-
+const debug = require('debug')('shp-write-stream:index')
 class Input extends stream.Writable {
   constructor(schema, createStream, opts, cb) {
     super({
@@ -109,10 +109,11 @@ class Input extends stream.Writable {
     this.toClose.push(from);
     this.inProgress++;
     pump(from, to, err=>{
+      this.inProgress--;
+      debug(`done, inProgress: ${this.inProgress}, err: ${err}`)
       if (err) {
         return this.callCB(err);
       }
-      this.inProgress--;
       if (type) {
         if (!this.out[type]) {
           this.out[type] = {};
