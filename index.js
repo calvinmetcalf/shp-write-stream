@@ -17,6 +17,16 @@ class Input extends stream.Writable {
     } else {
       this.preferPoint = !!opts.preferPoint;
     }
+    if (Array.isArray(schema)) {
+      this.schema = {
+        point: schema,
+        multipoint: schema,
+        line: schema,
+        polygon: schema
+      }
+    } else {
+      this.schema = schema
+    }
     this.schema = schema;
     this.createStream = createStream;
     this.cb = cb;
@@ -79,7 +89,10 @@ class Input extends stream.Writable {
     if (this.typeStreams.has(shpType)) {
       return this.typeStreams.get(shpType);
     }
-    const dbf = new DbfWritter(this.schema);
+    if (!this.schema[shpType]) {
+      throw new Error('no schema for type')
+    }
+    const dbf = new DbfWritter(this.schema[shpType]);
     const {shp, shx} = shpWritter(shpType);
     const dbfOut = this.createStream(shpType, 'dbf');
     const shpOut = this.createStream(shpType, 'shp');

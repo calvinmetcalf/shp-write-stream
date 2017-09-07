@@ -20,7 +20,7 @@ Takes 2 arguments and a callback, returns a writable stream.
 
 The stream is an object stream which takes geojson feature objects.
 
-First argument is a schema object where the key is the name of the property and the value is the type, one of `number`, `character`, `logical`, `date`.
+First argument is a schema object which is an array of objects with `name` and `type` values with type being  one of `number`, `character`, `logical`, `date`, `length` may also be specified and for numbers `precision` may be specified as well.
 
 Second argument is a function you need to provide that will be called with 2 arguments, shape type and file extension .e.g. `point` and `dbf` and it needs to return a writable stream where the shapefile component corresponding to that shapetype will be written to.
 

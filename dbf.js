@@ -32,6 +32,28 @@ function rpad(string, length) {
   var toPad = length - string.length;
   return string + blank.slice(0, toPad);
 }
+function formatNum(num, length, precision) {
+  var isNeg = num < 0;
+  if (isNeg) {
+    num = -num;
+    length--;
+  }
+  var split = num.toString().split('.');
+  var left = split[0];
+  var right = split[1] || '';
+  var llen = length - (precision + 1);
+  if (left > llen) {
+    left = left.slice(-llen);
+  } else if (left < llen) {
+    left = lpad(left, llen);
+  }
+  if (right > precision) {
+    right = right.slice(0, precision);
+  } else if (right < precision) {
+    right = rpad(right, precision);
+  }
+  return `${isNeg ? '-' : ''}${left}.${right}`;
+}
 const types = new Map([
   ['number', 'N'],
   ['character', 'C'],
@@ -49,20 +71,32 @@ class Dbf extends stream.Transform {
     this.records = 0;
     this.recordSize = 1;
     this.enc = enc || 'ascii';
-    for (let name in schema) {
-      let value = schema[name];
+    for (let item of schema) {
+      let value = item.type;
+      let name = item.name;
       if (typeof value !== 'string') {
         continue;
       }
       value = value.toLowerCase();
       if (types.has(value)) {
         let type = types.get(value);
-        this.recordSize += sizes[type];
-        this.fields.push({
+        let length = item.length || sizes[type];
+        this.recordSize += length;
+        let field = {
           name,
           type,
-          length: sizes[type]
-        });
+          length
+        };
+        if (type === 'N') {
+          field.precision = item.precision || 3;
+          if (field.precision > 15) {
+            field.precision = 15;
+          }
+          if (field.precision >= field.length) {
+            field.precision = field.length - 1;
+          }
+        }
+        this.fields.push(field);
       }
     }
   }
@@ -86,7 +120,7 @@ class Dbf extends stream.Transform {
           if (typeof value !== 'number') {
             value = '';
           }
-          out.write(lpad(value.toString(), length), cur, length, 'ascii');
+          out.write(formatNum(value, length, field.precision), cur, length, 'ascii');
           cur += length;
           break;
         case 'C':
@@ -138,7 +172,7 @@ class Dbf extends stream.Transform {
       out.writeUInt8(field.length, cur);
       cur++;
       if (field.type === 'N') {
-        out.writeInt8(3, cur);
+        out.writeInt8(field.precision, cur);
       }
       cur += 15;
     }
